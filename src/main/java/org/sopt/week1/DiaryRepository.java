@@ -3,7 +3,6 @@ package org.sopt.week1;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -29,14 +28,14 @@ public class DiaryRepository {
 
     public void delete(Long id) {
         if (!storage.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("존재하지 않는 ID 입니다.");
         }
         storage.remove(id);
     }
 
     public void revise(Long id, String body) {
         if (!storage.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("존재하지 않는 ID 입니다.");
         }
         storage.put(id, body);
     }

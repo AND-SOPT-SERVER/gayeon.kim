@@ -15,16 +15,26 @@ public class DiaryService {
     }
 
     public void deleteDiary(String id) {
-        diaryRepository.delete(Long.valueOf(id));
+        try {
+            diaryRepository.delete(convertIdToLong(id));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void reviseDiary(String id, String body) {
         try {
-            Long diaryId = Long.valueOf(id);
-            diaryRepository.revise(diaryId, body);
+            diaryRepository.revise(convertIdToLong(id), body);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException();
+            System.out.println(e.getMessage());
         }
     }
 
+    private long convertIdToLong(String id) {
+        try {
+            return Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("ID 값이 유효한 숫자 형식이 아닙니다.");
+        }
+    }
 }
