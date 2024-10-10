@@ -10,12 +10,12 @@ public class DiaryRepository {
     private final Map<Long, String> storage = new ConcurrentHashMap<>();
     private final AtomicLong numbering = new AtomicLong();
 
-    public void save(final Diary diary) {
+    protected void save(final Diary diary) {
         final long id = numbering.addAndGet(1);
         storage.put(id, diary.getBody());
     }
 
-    public List<Diary> findAll() {
+    protected List<Diary> findAll() {
         final List<Diary> diaries = new ArrayList<>();
         for(long idx = 1; idx <= numbering.longValue(); idx++) {
             if (storage.containsKey(idx)) {
@@ -26,17 +26,18 @@ public class DiaryRepository {
         return diaries;
     }
 
-    public void delete(Long id) {
-        if (!storage.containsKey(id)) {
-            throw new IllegalArgumentException("존재하지 않는 ID 입니다.");
-        }
+    protected void delete(Long id) {
         storage.remove(id);
     }
 
-    public void revise(Long id, String body) {
+    protected void revise(Long id, String body) {
+        storage.put(id, body);
+    }
+
+    protected long findById(long id) {
         if (!storage.containsKey(id)) {
             throw new IllegalArgumentException("존재하지 않는 ID 입니다.");
         }
-        storage.put(id, body);
+        return id;
     }
 }
