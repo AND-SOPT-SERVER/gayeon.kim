@@ -5,6 +5,7 @@ import org.sopt.week1.Main.UI.InvalidInputException;
 
 public class DiaryService {
     private final DiaryRepository diaryRepository = new DiaryRepository();
+    private final TrashBin trashBin = new TrashBin();
 
     public List<Diary> getDiaryList() {
         return diaryRepository.findAll();
@@ -18,7 +19,9 @@ public class DiaryService {
 
     public void deleteDiary(final String id) {
         long diaryId = convertIdToLong(id);
-        diaryRepository.delete(diaryRepository.findById(diaryId));
+        Diary diary = diaryRepository.findById(diaryId);
+        diaryRepository.delete(diary);
+        trashBin.pile(diary);
     }
 
     public void reviseDiary(final String id, final String body) {
@@ -27,6 +30,10 @@ public class DiaryService {
         Diary diary = diaryRepository.findById(diaryId);
         diary.updateBody(body);
         diaryRepository.revise(diary);
+    }
+
+    public void restoreDiary(String id) {
+        diaryRepository.restore(trashBin.restore(convertIdToLong(id)));
     }
 
     private long convertIdToLong(final String id) {

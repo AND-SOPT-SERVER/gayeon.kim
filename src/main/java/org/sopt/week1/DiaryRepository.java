@@ -27,18 +27,22 @@ public class DiaryRepository {
         return diaries;
     }
 
-    protected void delete(Diary diary) {
+    protected void delete(final Diary diary) {
         storage.remove(diary.getId());
     }
 
-    protected void revise(Diary diary) {
+    protected void revise(final Diary diary) {
         storage.put(diary.getId(), diary.getBody());
     }
 
-    protected Diary findById(long id) {
+    protected Diary findById(final long id) {
         if (!storage.containsKey(id)) {
             throw new InvalidInputException("존재하지 않는 id 입니다.");
         }
         return new Diary(id, storage.get(id));
+    }
+
+    protected void restore(final Diary diary) {
+        storage.put(diary.getId(), diary.getBody());
     }
 }
