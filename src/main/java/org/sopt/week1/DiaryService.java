@@ -32,7 +32,7 @@ public class DiaryService {
         diaryRepository.revise(diary);
     }
 
-    public void restoreDiary(String id) {
+    public void restoreDiary(final String id) {
         diaryRepository.restore(trashBin.restore(convertIdToLong(id)));
     }
 
