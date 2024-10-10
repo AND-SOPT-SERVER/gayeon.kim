@@ -1,6 +1,7 @@
 package org.sopt.week1;
 
 import java.util.List;
+import org.sopt.week1.Main.UI.InvalidInputException;
 
 public class DiaryService {
     private final DiaryRepository diaryRepository = new DiaryRepository();
@@ -10,44 +11,33 @@ public class DiaryService {
     }
 
     public void writeDiary(final String body) {
-        try {
-            checkBodyLength(body);
-            Diary diary = new Diary(null, body);
-            diaryRepository.save(diary);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        checkBodyLength(body);
+        Diary diary = new Diary(null, body);
+        diaryRepository.save(diary);
     }
 
     public void deleteDiary(String id) {
-        try {
-            long diaryId = convertIdToLong(id);
-            diaryRepository.delete(diaryRepository.findById(diaryId));
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
+        long diaryId = convertIdToLong(id);
+        diaryRepository.delete(diaryRepository.findById(diaryId));
     }
 
     public void reviseDiary(String id, String body) {
-        try {
-            long diaryId = convertIdToLong(id);
-            diaryRepository.revise(diaryRepository.findById(diaryId), body);
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
-        }
+        long diaryId = convertIdToLong(id);
+        checkBodyLength(body);
+        diaryRepository.revise(new Diary(diaryRepository.findById(diaryId).getId(), body));
     }
 
     private long convertIdToLong(String id) {
         try {
             return Long.valueOf(id);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("ID 값이 유효한 숫자 형식이 아닙니다.");
+            throw new InvalidInputException("유효한 숫자가 아닙니다.");
         }
     }
 
     private void checkBodyLength(String body) {
         if (body.codePointCount(0, body.length()) > 30) {
-            throw new IllegalArgumentException("최대 글자 수는 30자로 제한됩니다.");
+            throw new InvalidInputException("최대 글자 수(30자)를 초과하였습니다.");
         }
     }
 }

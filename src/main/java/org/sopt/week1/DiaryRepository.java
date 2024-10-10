@@ -1,5 +1,6 @@
 package org.sopt.week1;
 
+import org.sopt.week1.Main.UI.InvalidInputException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,18 +27,18 @@ public class DiaryRepository {
         return diaries;
     }
 
-    protected void delete(Long id) {
-        storage.remove(id);
+    protected void delete(Diary diary) {
+        storage.remove(diary.getId());
     }
 
-    protected void revise(Long id, String body) {
-        storage.put(id, body);
+    protected void revise(Diary diary) {
+        storage.put(diary.getId(), diary.getBody());
     }
 
-    protected long findById(long id) {
+    protected Diary findById(long id) {
         if (!storage.containsKey(id)) {
-            throw new IllegalArgumentException("존재하지 않는 ID 입니다.");
+            throw new InvalidInputException("존재하지 않는 id 입니다.");
         }
-        return id;
+        return new Diary(id, storage.get(id));
     }
 }

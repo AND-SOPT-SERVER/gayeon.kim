@@ -17,9 +17,15 @@ public class Main {
         void runRepeatedly() throws IOException;
 
         class UIException extends RuntimeException {
+            public UIException(String message) {
+                super(message);
+            }
         }
 
         class InvalidInputException extends UIException {
+            public InvalidInputException(String message) {
+                super(message);
+            }
         }
     }
 
@@ -45,7 +51,7 @@ public class Main {
                 try {
                     run();
                 } catch (InvalidInputException e) {
-                    ConsoleIO.printLine("잘못된 값을 입력하였습니다.");
+                    ConsoleIO.printLine(e.getMessage());
                 }
 
                 if (isFinished()) {
@@ -59,7 +65,7 @@ public class Main {
 
         private void run() throws IOException {
             switch (server.getStatus()) {
-                case READY, FINISHED, ERROR -> throw new UIException();
+                case READY, FINISHED, ERROR -> throw new UIException("서버 동작 오류");
 
                 case RUNNING -> {
                     switch (selected) {
@@ -96,7 +102,7 @@ public class Main {
                             server.finish();
                         }
                         default -> {
-                            throw new InvalidInputException();
+                            throw new InvalidInputException("잘못된 값을 입력하였습니다.");
                         }
                     }
                 }
