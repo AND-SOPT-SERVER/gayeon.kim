@@ -16,18 +16,20 @@ public class DiaryService {
         diaryRepository.save(diary);
     }
 
-    public void deleteDiary(String id) {
+    public void deleteDiary(final String id) {
         long diaryId = convertIdToLong(id);
         diaryRepository.delete(diaryRepository.findById(diaryId));
     }
 
-    public void reviseDiary(String id, String body) {
+    public void reviseDiary(final String id, final String body) {
         long diaryId = convertIdToLong(id);
         checkBodyLength(body);
-        diaryRepository.revise(new Diary(diaryRepository.findById(diaryId).getId(), body));
+        Diary diary = diaryRepository.findById(diaryId);
+        diary.updateBody(body);
+        diaryRepository.revise(diary);
     }
 
-    private long convertIdToLong(String id) {
+    private long convertIdToLong(final String id) {
         try {
             return Long.valueOf(id);
         } catch (NumberFormatException e) {
@@ -35,7 +37,7 @@ public class DiaryService {
         }
     }
 
-    private void checkBodyLength(String body) {
+    private void checkBodyLength(final String body) {
         if (body.codePointCount(0, body.length()) > 30) {
             throw new InvalidInputException("최대 글자 수(30자)를 초과하였습니다.");
         }

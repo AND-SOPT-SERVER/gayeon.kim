@@ -2,7 +2,7 @@ package org.sopt.week1;
 
 public class Diary {
     private Long id;
-    private final String body;
+    private String body;
 
     public Diary(Long id, String body) {
         this.id = id;
@@ -15,5 +15,9 @@ public class Diary {
 
     public String getBody() {
         return body;
+    }
+
+    public void updateBody(String body) {
+        this.body = body;
     }
 }
