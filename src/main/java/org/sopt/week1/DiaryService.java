@@ -13,8 +13,7 @@ public class DiaryService {
 
     public void writeDiary(final String body) {
         checkBodyLength(body);
-        Diary diary = new Diary(null, body);
-        diaryRepository.save(diary);
+        diaryRepository.save(body);
     }
 
     public void deleteDiary(final String id) {
@@ -28,6 +27,7 @@ public class DiaryService {
         long diaryId = convertIdToLong(id);
         checkBodyLength(body);
         Diary diary = diaryRepository.findById(diaryId);
+        validateReviseCount(diary);
         diary.updateBody(body);
         diaryRepository.revise(diary);
     }
@@ -44,7 +44,7 @@ public class DiaryService {
 
     private long convertIdToLong(final String id) {
         try {
-            return Long.valueOf(id);
+            return Long.parseLong(id);
         } catch (NumberFormatException e) {
             throw new InvalidInputException("유효한 숫자가 아닙니다.");
         }
@@ -53,6 +53,12 @@ public class DiaryService {
     private void checkBodyLength(final String body) {
         if (body.codePointCount(0, body.length()) > 30) {
             throw new InvalidInputException("최대 글자 수(30자)를 초과하였습니다.");
+        }
+    }
+
+    private void validateReviseCount(final Diary diary) {
+        if (!diary.checkReviseCount()) {
+            throw new InvalidInputException("일일 수정 횟수(2회)를 모두 소모했습니다.");
         }
     }
 }
