@@ -33,11 +33,13 @@ public class DiaryService {
     }
 
     public void restoreDiary(final String id) {
-        trashBin.restore(convertIdToLong(id))
+        long diaryId = convertIdToLong(id);
+        trashBin.restore(diaryId)
                 .ifPresentOrElse(diaryRepository::restore,
                         () -> {
                             throw new InvalidInputException("삭제되지 않는 id 입니다.");
                         });
+        trashBin.remove(diaryId);
     }
 
     private long convertIdToLong(final String id) {

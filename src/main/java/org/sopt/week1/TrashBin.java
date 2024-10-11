@@ -1,7 +1,5 @@
 package org.sopt.week1;
 
-import org.sopt.week1.Main.UI.InvalidInputException;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,5 +16,9 @@ public class TrashBin {
             return Optional.empty();
         }
         return Optional.of(new Diary(id, trashCan.get(id)));
+    }
+
+    protected void remove(long diaryId) {
+        trashCan.remove(diaryId);
     }
 }
