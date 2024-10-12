@@ -35,6 +35,10 @@ public class DiaryController {
         diaryService.reviseDiary(id, body);
     }
 
+    public void restore(String id) {
+        diaryService.restoreDiary(id);
+    }
+
     enum Status {
         READY,
         RUNNING,
