@@ -42,6 +42,5 @@ bin/
 .DS_Store
 
 #gradle
-./idea/**/gradle.xml
-./idea/**/misc.xml
-./idea/**/libraries
+./idea/gradle.xml
+./idea/misc.xml
