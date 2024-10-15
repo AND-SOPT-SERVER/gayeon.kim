@@ -44,3 +44,7 @@ bin/
 #gradle
 ./idea/gradle.xml
 ./idea/misc.xml
+.idea/*
+
+### yaml
+application.yml
