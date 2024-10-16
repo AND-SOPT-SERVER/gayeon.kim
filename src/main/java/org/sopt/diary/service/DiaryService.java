@@ -20,6 +20,7 @@ public class DiaryService {
 
     public DiaryIdResponse createDiary(final DiaryPostRequest request) {
         final DiaryEntity diary = new DiaryEntity(request.title(), request.content());
+        validateDiaryTitle(diary);
         diaryRepository.save(diary);
         return new DiaryIdResponse(diary.getId());
     }
@@ -45,6 +46,7 @@ public class DiaryService {
 
     public DiaryResponse updateDiary(final Long id, final DiaryPostRequest request) {
         DiaryEntity diary = findDiaryById(id);
+        validateDiaryTitle(diary);
         diary.update(request.title(), request.content());
         return DiaryResponse.of(diary);
     }
@@ -52,5 +54,11 @@ public class DiaryService {
     private DiaryEntity findDiaryById(final Long id) {
          return diaryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일기입니다."));
+    }
+
+    private void validateDiaryTitle(final DiaryEntity diary) {
+        if (diaryRepository.existsByTitle(diary.getTitle())) {
+            throw new IllegalArgumentException("이미 존재하는 제목입니다. 다른 제목을 입력해주세요.");
+        }
     }
 }

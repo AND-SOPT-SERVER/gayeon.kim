@@ -9,4 +9,5 @@ import java.util.List;
 @Component
 public interface DiaryRepository extends JpaRepository<DiaryEntity, Long> {
     List<DiaryEntity> findTop10ByOrderByCreatedAtDesc();
+    boolean existsByTitle(String title);
 }
