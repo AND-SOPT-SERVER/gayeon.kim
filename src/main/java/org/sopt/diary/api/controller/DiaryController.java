@@ -1,5 +1,6 @@
 package org.sopt.diary.api.controller;
 
+import org.sopt.diary.api.dto.request.DiaryCategoryRequest;
 import org.sopt.diary.api.dto.request.DiaryPostRequest;
 import org.sopt.diary.api.dto.response.DiaryDetailResponse;
 import org.sopt.diary.api.dto.response.DiaryIdResponse;
@@ -7,7 +8,14 @@ import org.sopt.diary.api.dto.response.DiaryListResponse;
 import org.sopt.diary.api.dto.response.DiaryResponse;
 import org.sopt.diary.service.DiaryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/luckybicky")
@@ -32,6 +40,11 @@ public class DiaryController {
     @GetMapping("/diaries")
     public ResponseEntity<DiaryListResponse> getAllDiary() {
         return ResponseEntity.ok(diaryService.getDiaryList());
+    }
+
+    @GetMapping("/diaries/categories")
+    public ResponseEntity<DiaryListResponse> getCategories(@RequestBody final DiaryCategoryRequest request) {
+        return ResponseEntity.ok(diaryService.getCategoryDiaryList(request));
     }
 
     @DeleteMapping("/diaries/{diaryId}")

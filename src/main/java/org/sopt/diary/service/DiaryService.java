@@ -1,13 +1,18 @@
 package org.sopt.diary.service;
 
+import java.util.List;
+import org.sopt.diary.api.dto.request.DiaryCategoryRequest;
 import org.sopt.diary.api.dto.request.DiaryPostRequest;
-import org.sopt.diary.api.dto.response.*;
+import org.sopt.diary.api.dto.response.DiaryDetailResponse;
+import org.sopt.diary.api.dto.response.DiaryGetResponse;
+import org.sopt.diary.api.dto.response.DiaryIdResponse;
+import org.sopt.diary.api.dto.response.DiaryListResponse;
+import org.sopt.diary.api.dto.response.DiaryResponse;
+import org.sopt.diary.domain.Category;
 import org.sopt.diary.domain.DiaryEntity;
 import org.sopt.diary.repository.DiaryRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Component
 @Transactional
@@ -19,7 +24,8 @@ public class DiaryService {
     }
 
     public DiaryIdResponse createDiary(final DiaryPostRequest request) {
-        final DiaryEntity diary = new DiaryEntity(request.title(), request.content());
+        final Category category = Category.getEnumCategoryFromStringCategory(request.category());
+        final DiaryEntity diary = new DiaryEntity(request.title(), request.content(), category);
         validateDiaryTitle(diary);
         diaryRepository.save(diary);
         return new DiaryIdResponse(diary.getId());
@@ -45,10 +51,21 @@ public class DiaryService {
     }
 
     public DiaryResponse updateDiary(final Long id, final DiaryPostRequest request) {
-        DiaryEntity diary = findDiaryById(id);
+        final DiaryEntity diary = findDiaryById(id);
+        final Category category = Category.getEnumCategoryFromStringCategory(request.category());
         validateDiaryTitle(diary);
-        diary.update(request.title(), request.content());
+        diary.update(request.title(), request.content(), category);
         return DiaryResponse.of(diary);
+    }
+
+    public DiaryListResponse getCategoryDiaryList(DiaryCategoryRequest request) {
+        Category category = Category.getEnumCategoryFromStringCategory(request.category());
+        List<DiaryGetResponse> diaries = diaryRepository
+                .findByCategory(category)
+                .stream()
+                .map(diary -> new DiaryGetResponse(diary.getId(), diary.getTitle()))
+                .toList();
+        return new DiaryListResponse(diaries);
     }
 
     private DiaryEntity findDiaryById(final Long id) {

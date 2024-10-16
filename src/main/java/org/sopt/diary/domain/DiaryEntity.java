@@ -16,6 +16,10 @@ public class DiaryEntity {
     @Column(nullable = false)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    Category category;
+
     @Column
     private LocalDateTime createdAt;
 
@@ -25,9 +29,10 @@ public class DiaryEntity {
     protected DiaryEntity() {
     }
 
-    public DiaryEntity(String title, String content) {
+    public DiaryEntity(String title, String content, Category category) {
         this.title = title;
         this.content = content;
+        this.category = category;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -48,9 +53,10 @@ public class DiaryEntity {
         return createdAt;
     }
 
-    public void update(String title, String content) {
+    public void update(final String title, final String content, final Category category) {
         this.title = title;
         this.content = content;
+        this.category = category;
         this.updatedAt = LocalDateTime.now();
     }
 }
