@@ -14,10 +14,8 @@ import org.sopt.diary.domain.Category;
 import org.sopt.diary.domain.DiaryEntity;
 import org.sopt.diary.repository.DiaryRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@Transactional
 public class DiaryService {
     private final DiaryRepository diaryRepository;
 
@@ -31,22 +29,20 @@ public class DiaryService {
         final DiaryEntity diary = new DiaryEntity(request.title(), request.content(), category);
         validateDiaryTitle(diary);
         diaryRepository.save(diary);
-        return new DiaryIdResponse(diary.getId());
+        return DiaryIdResponse.of(diary.getId());
     }
 
-    @Transactional(readOnly = true)
     public DiaryDetailResponse getDiary(final Long id) {
         return DiaryDetailResponse.of(findDiaryById(id));
     }
 
-    @Transactional(readOnly = true)
     public DiaryListResponse getDiaryList() {
         List<DiaryGetResponse> diaries = diaryRepository
                 .findTop10ByOrderByCreatedAtDesc()
                 .stream()
                 .map(diary -> new DiaryGetResponse(diary.getId(), diary.getTitle()))
                 .toList();
-        return new DiaryListResponse(diaries);
+        return DiaryListResponse.of(diaries);
     }
 
     public void deleteDiary(Long id) {
@@ -61,7 +57,6 @@ public class DiaryService {
         return DiaryResponse.of(diary);
     }
 
-    @Transactional(readOnly = true)
     public DiaryListResponse getCategoryDiaryList(DiaryCategoryRequest request) {
         Category category = Category.getEnumCategoryFromStringCategory(request.category());
         List<DiaryGetResponse> diaries = diaryRepository
@@ -69,7 +64,7 @@ public class DiaryService {
                 .stream()
                 .map(diary -> new DiaryGetResponse(diary.getId(), diary.getTitle()))
                 .toList();
-        return new DiaryListResponse(diaries);
+        return DiaryListResponse.of(diaries);
     }
 
     private DiaryEntity findDiaryById(final Long id) {
