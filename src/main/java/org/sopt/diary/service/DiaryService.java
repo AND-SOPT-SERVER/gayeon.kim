@@ -3,7 +3,6 @@ package org.sopt.diary.service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.sopt.diary.api.dto.request.DiaryCategoryRequest;
 import org.sopt.diary.api.dto.request.DiaryPostRequest;
 import org.sopt.diary.api.dto.response.DiaryDetailResponse;
 import org.sopt.diary.api.dto.response.DiaryGetResponse;
@@ -57,8 +56,8 @@ public class DiaryService {
         return DiaryResponse.of(diary);
     }
 
-    public DiaryListResponse getCategoryDiaryList(DiaryCategoryRequest request) {
-        Category category = Category.getEnumCategoryFromStringCategory(request.category());
+    public DiaryListResponse getCategoryDiaryList(final String requestCategory) {
+        Category category = Category.getEnumCategoryFromStringCategory(requestCategory);
         List<DiaryGetResponse> diaries = diaryRepository
                 .findByCategory(category)
                 .stream()
