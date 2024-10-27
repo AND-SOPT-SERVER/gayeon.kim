@@ -43,7 +43,7 @@ public class DiaryController {
     }
 
     @GetMapping("/diaries/categories")
-    public ResponseEntity<DiaryListResponse> getCategories(@RequestParam String category) {
+    public ResponseEntity<DiaryListResponse> getCategories(@RequestParam final String category) {
         return ResponseEntity.ok(diaryService.getCategoryDiaryList(category));
     }
 
