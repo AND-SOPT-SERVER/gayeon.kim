@@ -24,6 +24,7 @@ public class SoptMember {
     @Column(nullable = false)
     private int age;
 
+
     protected SoptMember() {}
 
     public SoptMember(String username, String password, String nickname, int age) {

@@ -26,13 +26,18 @@ public class DiaryEntity {
     @Column
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private SoptMember member;
+
     protected DiaryEntity() {
     }
 
-    public DiaryEntity(String title, String content, Category category) {
+    public DiaryEntity(String title, String content, Category category, SoptMember member) {
         this.title = title;
         this.content = content;
         this.category = category;
+        this.member = member;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -51,6 +56,10 @@ public class DiaryEntity {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public SoptMember getMember() {
+        return member;
     }
 
     public void update(final String title, final String content, final Category category) {
