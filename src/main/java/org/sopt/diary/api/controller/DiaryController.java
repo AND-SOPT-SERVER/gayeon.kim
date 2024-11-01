@@ -1,10 +1,11 @@
 package org.sopt.diary.api.controller;
 
+import jakarta.validation.Valid;
 import org.sopt.diary.api.dto.request.DiaryPostRequest;
 import org.sopt.diary.api.dto.response.DiaryDetailResponse;
-import org.sopt.diary.api.dto.response.DiaryIdResponse;
 import org.sopt.diary.api.dto.response.DiaryListResponse;
 import org.sopt.diary.api.dto.response.DiaryResponse;
+import org.sopt.diary.api.dto.response.IdResponse;
 import org.sopt.diary.service.DiaryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +28,7 @@ public class DiaryController {
     }
 
     @PostMapping("/diaries")
-    public ResponseEntity<DiaryIdResponse> createDiary(@RequestBody final DiaryPostRequest request) {
-        validateDiary(request);
+    public ResponseEntity<IdResponse> createDiary(@Valid @RequestBody final DiaryPostRequest request) {
         return ResponseEntity.ok(diaryService.createDiary(request));
     }
 
@@ -54,14 +54,8 @@ public class DiaryController {
     }
 
     @PatchMapping("/diaries/{diaryId}")
-    public ResponseEntity<DiaryResponse> updateDiary(@PathVariable final Long diaryId, @RequestBody final DiaryPostRequest request) {
-        validateDiary(request);
+    public ResponseEntity<DiaryResponse> updateDiary(@PathVariable final Long diaryId,
+                                                     @Valid @RequestBody final DiaryPostRequest request) {
         return ResponseEntity.ok(diaryService.updateDiary(diaryId, request));
-    }
-
-    private void validateDiary(final DiaryPostRequest request) {
-        if (request.title().length() > 30 || request.content().length() > 100 ) {
-            throw new IllegalArgumentException("최대 글자수를 초과하였습니다.");
-        }
     }
 }

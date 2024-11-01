@@ -6,7 +6,7 @@ import java.util.List;
 import org.sopt.diary.api.dto.request.DiaryPostRequest;
 import org.sopt.diary.api.dto.response.DiaryDetailResponse;
 import org.sopt.diary.api.dto.response.DiaryGetResponse;
-import org.sopt.diary.api.dto.response.DiaryIdResponse;
+import org.sopt.diary.api.dto.response.IdResponse;
 import org.sopt.diary.api.dto.response.DiaryListResponse;
 import org.sopt.diary.api.dto.response.DiaryResponse;
 import org.sopt.diary.domain.Category;
@@ -22,13 +22,13 @@ public class DiaryService {
         this.diaryRepository = diaryRepository;
     }
 
-    public DiaryIdResponse createDiary(final DiaryPostRequest request) {
+    public IdResponse createDiary(final DiaryPostRequest request) {
         validateLastDiaryTime();
         final Category category = Category.getEnumCategoryFromStringCategory(request.category());
         final DiaryEntity diary = new DiaryEntity(request.title(), request.content(), category);
         validateDiaryTitle(diary);
         diaryRepository.save(diary);
-        return DiaryIdResponse.of(diary.getId());
+        return IdResponse.of(diary.getId());
     }
 
     public DiaryDetailResponse getDiary(final Long id) {
